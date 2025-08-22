@@ -28,6 +28,7 @@ public class SpringJwtAuthApplication {
             UserRepository userRepository 
     ){
         return args -> {
+        	
         	 if (userRepository.findByEmail("admin1@gmail.com").isEmpty()) {
             var admin = RegisterRequest.builder()
                     .firstName("jamal")

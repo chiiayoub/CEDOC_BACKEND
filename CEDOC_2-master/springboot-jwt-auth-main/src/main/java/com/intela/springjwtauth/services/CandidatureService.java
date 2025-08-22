@@ -2,6 +2,7 @@ package com.intela.springjwtauth.services;
 
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public CandidaturesMapper mapToCandidatures(Candidature candidature,User profess
 			,candidature.getTypeEtablissement(), candidature.getMention(),sujetsTitres1);
 	}
 ////////////////////////////////////////////////////Admin Candidatures
-/*
+
 public CandidaturesMapper mapToCandidaturesAdmin(Candidature candidature) {
 	  List<Sujet> sujets = candidature.getSujetsChoisis();
 	   List<SujetMapper> sujetsMappers = new ArrayList<SujetMapper>();
@@ -81,7 +82,7 @@ public List<CandidaturesMapper> getCandidaturesAdmin() {
      return candidatures.stream()
              .map(c -> mapToCandidaturesAdmin(c))
              .toList();
-}*/
+*/
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -135,7 +136,7 @@ public List<CandidaturesMapper> getCandidatures(User prof) {
              .map(c -> mapToCandidatures(c,prof))
              .toList();
 }
-/*
+
 @Transactional
     public List<CandidaturesMapper> getCandidaturesByChefId(Integer chefId) {
         List<Candidature> candidatures = candidatureRepository.findCandidaturesByChefId(chefId);
@@ -169,22 +170,6 @@ public List<CandidaturesMapper> getCandidatures(User prof) {
             ))
             .toList();
     }
-
-*/
-
-public List<CandidaturesMapper> getCandidaturesByChefId(User user) {
-	
-	Equipe equipeDuChef = null;
-
-	if (user.getRole() == Role.CHEF_EQUIPE) {
-	    equipeDuChef = equipeRepository.findByChefEquipe(user)
-	                    .orElseThrow(() -> new RuntimeException("Aucune équipe trouvée pour ce chef"));
-	} else {
-	    throw new RuntimeException("L'utilisateur n'est pas un chef d'équipe");
-	}
-
-}
-
 
 
 

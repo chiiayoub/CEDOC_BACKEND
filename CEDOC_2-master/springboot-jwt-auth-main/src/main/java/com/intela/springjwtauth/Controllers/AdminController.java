@@ -52,7 +52,7 @@ public class AdminController {
         EquipeMapper equipeMapper = equipeService.creerEquipe(request);
         return ResponseEntity.ok(equipeMapper);
     }
-    
+     
     /*
     @GetMapping("/getCandidatures")
     public ResponseEntity<List<CandidaturesMapper>> getCandidatures(Principal principal){

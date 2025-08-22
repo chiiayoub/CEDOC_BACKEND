@@ -31,7 +31,8 @@ public class SecurityConfig{
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize)->authorize
-                        .requestMatchers("/api/v1/auth/**","/api/v1/user/**","/api/v1/CHEF_EQUIPE/**")
+                        .requestMatchers("/api/v1/auth/**","/api/v1/user/**","/api/v1/CHEF_EQUIPE/**","/swagger-ui/**",
+                                "/v3/api-docs/**")
                         .permitAll()
 
                         //CHEF_EQUIPE ENDPOINTS
