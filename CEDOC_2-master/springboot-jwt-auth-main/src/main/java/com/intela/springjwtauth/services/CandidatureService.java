@@ -56,33 +56,9 @@ public CandidaturesMapper mapToCandidatures(Candidature candidature,User profess
 			candidature.getNationalite(),candidature.getDateNaissance(),candidature.getLieuNaissance() ,  candidature.getTelephone(),candidature.getEmail(), candidature.getDiplome(), candidature.getSpecialite()
 			,candidature.getTypeEtablissement(), candidature.getMention(),sujetsTitres1);
 	}
-////////////////////////////////////////////////////Admin Candidatures
-
-public CandidaturesMapper mapToCandidaturesAdmin(Candidature candidature) {
-	  List<Sujet> sujets = candidature.getSujetsChoisis();
-	   List<SujetMapper> sujetsMappers = new ArrayList<SujetMapper>();
-	   for (Sujet sujet : sujets) {
-		sujetsMappers.add(sujetService.mapToSujetMapper(sujet));
-	}
-	   
-	  Map<Long, String> sujetsTitres1 = new HashMap<Long, String>();
-	  for (SujetMapper sujetMapper : sujetsMappers) {
-		  sujetsTitres1.put(sujetMapper.id(), sujetMapper.titre());
-	}
-	
-	return new CandidaturesMapper(candidature.getNom(), candidature.getPrenom(),candidature.getStatutProfessionnel() , candidature.getGenre(), candidature.getEtatCivil(),
-			candidature.getNationalite(),candidature.getDateNaissance(),candidature.getLieuNaissance() ,  candidature.getTelephone(),candidature.getEmail(), candidature.getDiplome(), candidature.getSpecialite()
-			,candidature.getTypeEtablissement(), candidature.getMention(),sujetsTitres1);
-	}
 
 
-/*
-public List<CandidaturesMapper> getCandidaturesAdmin() {
-     List<Candidature> candidatures = candidatureRepository.findAll();
-     return candidatures.stream()
-             .map(c -> mapToCandidaturesAdmin(c))
-             .toList();
-*/
+
 
 ////////////////////////////////////////////////////////////////////////
 
@@ -129,17 +105,20 @@ public Candidature postuler(User user , com.intela.springjwtauth.request.Candida
     
 	
 }
-
+//// par professeur
 public List<CandidaturesMapper> getCandidatures(User prof) {
      List<Candidature> candidatures = candidatureRepository.findBySujetsProposesPar(prof);
      return candidatures.stream()
              .map(c -> mapToCandidatures(c,prof))
              .toList();
 }
+////////////////////////////////////////////////////////////////
 
 @Transactional
-    public List<CandidaturesMapper> getCandidaturesByChefId(Integer chefId) {
-        List<Candidature> candidatures = candidatureRepository.findCandidaturesByChefId(chefId);
+    public List<CandidaturesMapper> getCandidaturesForChefId(Integer chefId) {
+	
+	var candidatures = candidatureRepository.findCandidaturesForChef(chefId)
+			.orElseThrow(() -> new RuntimeException("error"));
 
         return candidatures.stream()
             .map(candidature -> new CandidaturesMapper(
@@ -170,9 +149,39 @@ public List<CandidaturesMapper> getCandidatures(User prof) {
             ))
             .toList();
     }
+//////////////////////////////////  admin
+public List<CandidaturesMapper> getAllCandidature(){
+	var candidatures = candidatureRepository.findAllCandidatures()
+			.orElseThrow(() -> new RuntimeException("error"));
 
+        return candidatures.stream()
+            .map(candidature -> new CandidaturesMapper(
+                candidature.getNom(),
+                candidature.getPrenom(),
+                candidature.getStatutProfessionnel(),
+                candidature.getGenre(),
+                candidature.getEtatCivil(),
+                candidature.getNationalite(),
+                candidature.getDateNaissance(),
+                candidature.getLieuNaissance(),
+                candidature.getTelephone(),
+                candidature.getEmail(),
+                candidature.getDiplome(),
+                candidature.getSpecialite(),
+                candidature.getTypeEtablissement(),
+                candidature.getMention(),
+                candidature.getSujetsChoisis().stream()         
+                    .collect(Collectors.toMap(
+                        Sujet::getId,
+                        Sujet::getTitre,
+                        (oldValue, newValue) -> oldValue,
+                        HashMap::new
+                    ))
+            ))
+            .toList();
+}
 
-
+/////////////////////
 public void accepterCandidature(Long id) {
 	 Candidature candidature = candidatureRepository.findById(id);
 	 candidature.setStatus(CandidatureStatus.ACCEPTEE);

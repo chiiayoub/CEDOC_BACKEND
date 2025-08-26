@@ -22,6 +22,8 @@ public class Sujet {
 	    @JoinColumn(name = "professeur_id") 
 	    @JsonIgnoreProperties({"id","email", "password","role", "enabled", "authorities", "username", "accountNonLocked", "credentialsNonExpired", "accountNonExpired"})
 	    private User professeur;
+	   
+	    
 	    
 	    
 }

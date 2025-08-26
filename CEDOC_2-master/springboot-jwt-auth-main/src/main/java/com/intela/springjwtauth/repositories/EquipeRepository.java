@@ -20,7 +20,9 @@ public interface EquipeRepository extends JpaRepository<Equipe, Long>  {
 	@Query("SELECT e FROM Equipe e LEFT JOIN FETCH e.professeurs WHERE e.chefEquipe = :chefEquipe")
 	List<Equipe> findAllByChefEquipeWithProfesseurs(@Param("chefEquipe") User chefEquipe);
 	
-	Optional<Equipe> findByChefEquipe(User user);
+	
+	   Optional<Equipe> findByChefEquipe(User chefEquipe);
+	
 	
 
 }

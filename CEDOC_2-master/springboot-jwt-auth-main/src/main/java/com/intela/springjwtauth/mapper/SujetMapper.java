@@ -1,5 +1,6 @@
 package com.intela.springjwtauth.mapper;
 
+import com.intela.springjwtauth.models.Equipe;
 import com.intela.springjwtauth.models.SujetStatut;
 
 import lombok.RequiredArgsConstructor;

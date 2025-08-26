@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.intela.springjwtauth.mapper.CandidaturesMapper;
 import com.intela.springjwtauth.mapper.SujetMapper;
-
+import com.intela.springjwtauth.models.Candidature;
 import com.intela.springjwtauth.models.Sujet;
 import com.intela.springjwtauth.models.User;
 import com.intela.springjwtauth.repositories.UserRepository;
@@ -28,26 +28,7 @@ private final SujetService sujetService;
 private final CandidatureService candidatureService;
 private final UserRepository userRepository;
 
-    @PostMapping("/post")
-    public ResponseEntity<String> CHEF_EQUIPE_Post(){
-        return ResponseEntity.ok("Manager:: POST");
-    }
-
-    @PutMapping ("/put")
-    public ResponseEntity<String> CHEF_EQUIPE_Put(){
-        return ResponseEntity.ok("CHEF_EQUIPE:: PUT");
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> CHEF_EQUIPE__Delete(){
-        return ResponseEntity.ok("CHEF_EQUIPE:: DELETE");
-    }
-
-    @GetMapping("/get")
-    public ResponseEntity<String> CHEF_EQUIPE_Get(){
-        return ResponseEntity.ok("CHEF_EQUIPE:: GET");
-    }
-
+  
 @PutMapping("/validerSujet/{id}") 
 public SujetMapper validerSujet(@PathVariable Long id) {
     return sujetService.validerSujet(id);
@@ -75,7 +56,7 @@ public ResponseEntity<List<CandidaturesMapper>> getCandidaturesChef(Principal pr
     User chef = userRepository.findByEmail(principal.getName())
             .orElseThrow(() -> new RuntimeException("Chef non trouvé"));
 
-    List<CandidaturesMapper> candidatures = candidatureService.getCandidaturesByChefId(chef.getId());
+    List<CandidaturesMapper> candidatures = candidatureService.getCandidaturesForChefId(chef.getId());
     return ResponseEntity.ok(candidatures);
 }
 

@@ -25,14 +25,22 @@ public interface CandidatureRepository extends JpaRepository<Candidature, Intege
 	  
 	  
 
-	      @Query("""
-	          SELECT DISTINCT c FROM Candidature c
-	          JOIN FETCH c.sujetsChoisis s
-	          JOIN s.professeur p
-	          JOIN FETCH p.equipes e
-	          WHERE e.chefEquipe.id = :chefId
-	      """)
-	      List<Candidature> findCandidaturesByChefId(@Param("chefId") Integer chefId);
+	  @Query(value = "SELECT DISTINCT c.* " +
+              "FROM candidature c " +
+              "JOIN candidatures_sujets cs ON c.id = cs.candidature_id " +
+              "JOIN sujet s ON cs.sujet_id = s.id " +
+              "JOIN users p ON s.professeur_id = p.id " +
+              "JOIN cedoc_2.equipe_professeurs ep ON p.id = ep.user_id " +
+              "JOIN equipe e ON ep.equipe_id = e.id " +
+              "WHERE e.chef_equipe_id = :chefId", 
+      nativeQuery = true)
+Optional<List<Candidature>> findCandidaturesForChef(@Param("chefId") Integer chefId);
+	  
+	  
+	  @Query("SELECT DISTINCT c FROM Candidature c " +
+	           "LEFT JOIN FETCH c.sujetsChoisis s")
+	  Optional<List<Candidature>> findAllCandidatures();
+	  
 	  
 	  
 	  

@@ -2,15 +2,17 @@ package com.intela.springjwtauth.services;
 
 import java.util.HashSet;
 import java.util.List;
-
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import com.intela.springjwtauth.mapper.SujetMapper;
+import com.intela.springjwtauth.mapper.SujetMapperChef;
 import com.intela.springjwtauth.models.Equipe;
 import com.intela.springjwtauth.models.Sujet;
 import com.intela.springjwtauth.models.SujetStatut;
@@ -32,15 +34,35 @@ private final EquipeRepository equipeRepository;
 
 
 public SujetMapper mapToSujetMapper(Sujet sujet) {
+	User user =sujet.getProfesseur();
+	
+	
+	
     return new SujetMapper(
         sujet.getId(),
         sujet.getTitre(),
         sujet.getDescription(),
         sujet.getProfesseur().toString(),
-      
+        
         sujet.getStatut().name()
     );
 }
+public SujetMapperChef mapToSujetMapper_chef(Sujet sujet) {
+	User user =sujet.getProfesseur();
+	var equipe = equipeRepository.findByChefEquipe(user)
+    		.orElseThrow(() -> new RuntimeException("Aucune équipe trouvée pour ce chef"));
+	
+	
+    return new SujetMapperChef(
+        sujet.getId(),
+        sujet.getTitre(),
+        sujet.getDescription(),
+        sujet.getProfesseur().toString(),
+        equipe.getId(),
+        sujet.getStatut().name()
+    );
+}
+
 
 public SujetMapper proposerSujet(User user,SujetRequest request ) {
 	Sujet sujet=new Sujet();
@@ -48,7 +70,9 @@ public SujetMapper proposerSujet(User user,SujetRequest request ) {
     sujet.setTitre(request.titre);
     sujet.setDescription(request.description);
     sujet.setStatut(SujetStatut.EN_ATTENTE);
-    
+   
+    		
+
     Sujet saved = sujetRepository.save(sujet);
     
     return mapToSujetMapper(saved);

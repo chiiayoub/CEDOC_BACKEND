@@ -24,45 +24,23 @@ import lombok.RequiredArgsConstructor;
 public class AdminController {
 	
 	private final EquipeService equipeService ;
-	
-	private final UserRepository userRepository;
+	private final CandidatureService candidatureService;
 
-    @PostMapping("/home")
-    public ResponseEntity<String> adminPost(){
-    	
-        return ResponseEntity.ok("Admin:: POST");
-    }
 
-    @PutMapping("/put")
-    public ResponseEntity<String> adminPut(){
-        return ResponseEntity.ok("Admin:: PUT");
-    }
-
-    @DeleteMapping("/delete")
-    public ResponseEntity<String> adminDelete(){
-        return ResponseEntity.ok("Admin:: DELETE");
-    }
-
-    @GetMapping("/get")
-    public ResponseEntity<String> adminGet(){
-        return ResponseEntity.ok("Admin:: GET");
-    }
-    @PostMapping("/addEquipe")
+      @PostMapping("/addEquipe")
     public ResponseEntity<EquipeMapper> creerEquipe(@RequestBody EquipeRequest request) {
         EquipeMapper equipeMapper = equipeService.creerEquipe(request);
         return ResponseEntity.ok(equipeMapper);
     }
      
-    /*
-    @GetMapping("/getCandidatures")
-    public ResponseEntity<List<CandidaturesMapper>> getCandidatures(Principal principal){
-    	User admin = userRepository.findByEmail(principal.getName())
-    			.orElseThrow(() -> new RuntimeException("Admin non trouve"));  */
-    	 
-    	/* List<CandidaturesMapper> candidatures = candidatureService.getCandidaturesAdmin();
-    	 return ResponseEntity.ok(candidatures);
+
+@GetMapping("/getCandidatures")
+public ResponseEntity<List<CandidaturesMapper>> getCandidaturesChef() {
     
-    } 	*/
+
+    List<CandidaturesMapper> candidatures = candidatureService.getAllCandidature();
+    return ResponseEntity.ok(candidatures);
+}
     
     
 }
