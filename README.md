@@ -3,27 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEDOC Management System</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            margin: 20px;
-            background-color: #f9f9f9;
-            color: #333;
-        }
-        h1, h2, h3 {
-            color: #2c3e50;
-        }
-        hr {
-            margin: 20px 0;
-            border: 0;
-            border-top: 1px solid #ccc;
-        }
-        ul {
-            margin: 10px 0 10px 20px;
-        }
-    </style>
+    
 </head>
 <body>
 
